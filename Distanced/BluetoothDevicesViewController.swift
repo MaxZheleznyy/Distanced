@@ -17,5 +17,22 @@ class BluetoothDevicesViewController: UIViewController {
         super.viewDidLoad()
         
         locationManager.requestAlwaysAuthorization()
+        locationManager.delegate = self
     }
+    
+    func startMonitoringObject(bluetoothObject: BluetoothDeviceObject) {
+        let beaconRegion = bluetoothObject.asBeaconRegion()
+        locationManager.startMonitoring(for: beaconRegion)
+        locationManager.startRangingBeacons(in: beaconRegion)
+    }
+    
+    func stopMonitoringObject(bluetoothObject: BluetoothDeviceObject) {
+        let beaconRegion = bluetoothObject.asBeaconRegion()
+        locationManager.stopMonitoring(for: beaconRegion)
+        locationManager.stopRangingBeacons(in: beaconRegion)
+    }
+}
+
+extension BluetoothDevicesViewController: CLLocationManagerDelegate {
+    
 }
