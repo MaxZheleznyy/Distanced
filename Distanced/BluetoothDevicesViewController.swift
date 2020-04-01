@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  BluetoothDevicesViewController.swift
 //  Distanced
 //
 //  Created by Maxim Zheleznyy on 4/1/20.
@@ -9,7 +9,7 @@
 import UIKit
 import CoreLocation
 
-class ViewController: UIViewController {
+class BluetoothDevicesViewController: UIViewController {
     
     let locationManager = CLLocationManager()
 
