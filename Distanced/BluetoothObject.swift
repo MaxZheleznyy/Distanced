@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import CoreLocation
 
 struct BluetoothObjectConstant {
   static let nameKey = "name"
@@ -18,14 +19,14 @@ struct BluetoothObjectConstant {
 class BluetoothObject: NSObject, NSCoding {
   let name: String
   let uuid: UUID
-  let majorValue: UInt16
-  let minorValue: UInt16
+  let majorValue: CLBeaconMajorValue
+  let minorValue: CLBeaconMinorValue
   
   init(name: String, uuid: UUID, majorValue: Int, minorValue: Int) {
     self.name = name
     self.uuid = uuid
-    self.majorValue = UInt16(majorValue)
-    self.minorValue = UInt16(minorValue)
+    self.majorValue = CLBeaconMajorValue(majorValue)
+    self.minorValue = CLBeaconMinorValue(minorValue)
   }
 
   required init(coder aDecoder: NSCoder) {
