@@ -1,5 +1,5 @@
 //
-//  BluetoothDevicesViewController.swift
+//  BeaconDevicesViewController.swift
 //  Distanced
 //
 //  Created by Maxim Zheleznyy on 4/1/20.
@@ -11,7 +11,7 @@ import CoreLocation
 import CoreBluetooth
 
 
-class BluetoothDevicesViewController: UIViewController {
+class BeaconDevicesViewController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
     
@@ -21,7 +21,7 @@ class BluetoothDevicesViewController: UIViewController {
     var beaconPeripheralData: NSDictionary!
     var peripheralManager: CBPeripheralManager!
     
-    var knownBeaconsArray = [BluetoothDeviceObject]()
+    var knownBeaconsArray = [BeaconDeviceObject]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -75,7 +75,7 @@ class BluetoothDevicesViewController: UIViewController {
     }
 }
 
-extension BluetoothDevicesViewController: CBPeripheralManagerDelegate {
+extension BeaconDevicesViewController: CBPeripheralManagerDelegate {
     func peripheralManagerDidUpdateState(_ peripheral: CBPeripheralManager) {
         if peripheral.state == .poweredOn {
             peripheralManager.startAdvertising(beaconPeripheralData as? [String: Any])
@@ -85,7 +85,7 @@ extension BluetoothDevicesViewController: CBPeripheralManagerDelegate {
     }
 }
 
-extension BluetoothDevicesViewController: UITableViewDataSource, UITableViewDelegate {
+extension BeaconDevicesViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = self.tableView.dequeueReusableCell(withIdentifier: BeaconDeviceTableViewCell.cellIdentifier) as! BeaconDeviceTableViewCell
         
@@ -109,7 +109,7 @@ extension BluetoothDevicesViewController: UITableViewDataSource, UITableViewDele
     }
 }
 
-extension BluetoothDevicesViewController: CLLocationManagerDelegate {
+extension BeaconDevicesViewController: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, monitoringDidFailFor region: CLRegion?, withError error: Error) {
         print("Failed monitoring region: \(error.localizedDescription)")
     }
@@ -120,7 +120,7 @@ extension BluetoothDevicesViewController: CLLocationManagerDelegate {
 
     func locationManager(_ manager: CLLocationManager, didRangeBeacons beacons: [CLBeacon], in region: CLBeaconRegion) {
         for beacon in beacons {            
-            var newDevice = BluetoothDeviceObject(beacon: beacon)
+            var newDevice = BeaconDeviceObject(beacon: beacon)
             
             if let existingDeviceIndex = knownBeaconsArray.firstIndex(of: newDevice) {
                 let oldDeviceObjectEmoji = knownBeaconsArray[existingDeviceIndex].emojiName

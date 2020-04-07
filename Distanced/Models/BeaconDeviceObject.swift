@@ -1,5 +1,5 @@
 //
-//    BluetoothDeviceObject.swift
+//    BeaconDeviceObject.swift
 //    Distanced
 //
 //    Created by Maxim Zheleznyy on 4/1/20.
@@ -9,7 +9,7 @@
 import Foundation
 import CoreLocation
 
-struct BluetoothDeviceObject: Hashable {
+struct BeaconDeviceObject: Hashable {
     let uuid: UUID
     let majorValue: CLBeaconMajorValue
     let minorValue: CLBeaconMinorValue
@@ -64,7 +64,7 @@ struct BluetoothDeviceObject: Hashable {
         }
     }
     
-    static func == (lhs: BluetoothDeviceObject, rhs: BluetoothDeviceObject) -> Bool {
+    static func == (lhs: BeaconDeviceObject, rhs: BeaconDeviceObject) -> Bool {
         return lhs.uniquNameHash == rhs.uniquNameHash
     }
 }

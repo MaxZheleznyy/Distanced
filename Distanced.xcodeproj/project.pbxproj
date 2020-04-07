@@ -11,11 +11,11 @@
 		500CF895243CFDB90037DADC /* GlobalVariables.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500CF894243CFDB90037DADC /* GlobalVariables.swift */; };
 		5035EEBC2434FDEA00B2694F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5035EEBB2434FDEA00B2694F /* AppDelegate.swift */; };
 		5035EEBE2434FDEA00B2694F /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5035EEBD2434FDEA00B2694F /* SceneDelegate.swift */; };
-		5035EEC02434FDEA00B2694F /* BluetoothDevicesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5035EEBF2434FDEA00B2694F /* BluetoothDevicesViewController.swift */; };
+		5035EEC02434FDEA00B2694F /* BeaconDevicesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5035EEBF2434FDEA00B2694F /* BeaconDevicesViewController.swift */; };
 		5035EEC32434FDEA00B2694F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5035EEC12434FDEA00B2694F /* Main.storyboard */; };
 		5035EEC52434FDEB00B2694F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5035EEC42434FDEB00B2694F /* Assets.xcassets */; };
 		5035EEC82434FDEB00B2694F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5035EEC62434FDEB00B2694F /* LaunchScreen.storyboard */; };
-		5035EED02435072A00B2694F /* BluetoothDeviceObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5035EECF2435072A00B2694F /* BluetoothDeviceObject.swift */; };
+		5035EED02435072A00B2694F /* BeaconDeviceObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5035EECF2435072A00B2694F /* BeaconDeviceObject.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,12 +24,12 @@
 		5035EEB82434FDEA00B2694F /* Distanced.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Distanced.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5035EEBB2434FDEA00B2694F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5035EEBD2434FDEA00B2694F /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		5035EEBF2434FDEA00B2694F /* BluetoothDevicesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothDevicesViewController.swift; sourceTree = "<group>"; };
+		5035EEBF2434FDEA00B2694F /* BeaconDevicesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeaconDevicesViewController.swift; sourceTree = "<group>"; };
 		5035EEC22434FDEA00B2694F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		5035EEC42434FDEB00B2694F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5035EEC72434FDEB00B2694F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		5035EEC92434FDEB00B2694F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		5035EECF2435072A00B2694F /* BluetoothDeviceObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothDeviceObject.swift; sourceTree = "<group>"; };
+		5035EECF2435072A00B2694F /* BeaconDeviceObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeaconDeviceObject.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -46,7 +46,7 @@
 		500CF896243D04920037DADC /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				5035EEBF2434FDEA00B2694F /* BluetoothDevicesViewController.swift */,
+				5035EEBF2434FDEA00B2694F /* BeaconDevicesViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -54,7 +54,7 @@
 		500CF897243D049C0037DADC /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				5035EECF2435072A00B2694F /* BluetoothDeviceObject.swift */,
+				5035EECF2435072A00B2694F /* BeaconDeviceObject.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -181,8 +181,8 @@
 			files = (
 				500CF895243CFDB90037DADC /* GlobalVariables.swift in Sources */,
 				500CF893243CFB8C0037DADC /* BeaconDeviceTableViewCell.swift in Sources */,
-				5035EEC02434FDEA00B2694F /* BluetoothDevicesViewController.swift in Sources */,
-				5035EED02435072A00B2694F /* BluetoothDeviceObject.swift in Sources */,
+				5035EEC02434FDEA00B2694F /* BeaconDevicesViewController.swift in Sources */,
+				5035EED02435072A00B2694F /* BeaconDeviceObject.swift in Sources */,
 				5035EEBC2434FDEA00B2694F /* AppDelegate.swift in Sources */,
 				5035EEBE2434FDEA00B2694F /* SceneDelegate.swift in Sources */,
 			);
