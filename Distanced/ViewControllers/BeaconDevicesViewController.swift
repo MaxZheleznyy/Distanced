@@ -20,23 +20,59 @@ class BeaconDevicesViewController: UIViewController {
     var localBeacon: CLBeaconRegion!
     var beaconPeripheralData: NSDictionary!
     var peripheralManager: CBPeripheralManager!
+    var manager: CBCentralManager!
     
     var knownBeaconsArray = [BeaconDeviceObject]()
+    
+    var needToShowLocationAlert = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        locationManager.requestAlwaysAuthorization()
-        locationManager.delegate = self
-
+        manager = CBCentralManager()
+        manager.delegate = self
+        
         tableView.delegate = self
         tableView.dataSource = self
         
-        becameBeacon()
-        startLookingForBeacons()
+        getLocationStatus()
     }
     
-    func becameBeacon() {
+    override func viewDidAppear(_ animated: Bool) {
+        if needToShowLocationAlert {
+            needToShowLocationAlert = false
+            showNeedAuthAlert(title: "No Location Data", message: "App uses location to calculate distance between you and other people. \nOpen Settings to turn it on?")
+        }
+    }
+    
+    private func getLocationStatus() {
+        locationManager.delegate = self
+        
+        let status = CLLocationManager.authorizationStatus()
+        switch status {
+        case .authorizedAlways, .authorizedWhenInUse:
+            startLookingForBeacons()
+        case .restricted, .denied:
+            needToShowLocationAlert = true
+        default:
+            locationManager.requestAlwaysAuthorization()
+        }
+    }
+    
+    private func startLookingForBeacons() {
+        guard let uuid = GlobalVariables.uuid else { return }
+        
+        if #available(iOS 13.0, *) {
+            let beaconRegion = CLBeaconRegion(uuid: uuid, identifier: GlobalVariables.identifier)
+            locationManager.startMonitoring(for: beaconRegion)
+            locationManager.startRangingBeacons(in: beaconRegion)
+        } else {
+            let beaconRegion = CLBeaconRegion(proximityUUID: uuid, identifier: GlobalVariables.identifier)
+            locationManager.startRangingBeacons(in: beaconRegion)
+        }
+    }
+    
+    private func becameBeacon() {
         if localBeacon != nil {
             stopBeingBeacon()
         }
@@ -54,24 +90,30 @@ class BeaconDevicesViewController: UIViewController {
         peripheralManager = CBPeripheralManager(delegate: self, queue: nil, options: nil)
     }
     
-    func stopBeingBeacon() {
+    private func stopBeingBeacon() {
         peripheralManager.stopAdvertising()
         peripheralManager = nil
         beaconPeripheralData = nil
         localBeacon = nil
     }
     
-    func startLookingForBeacons() {
-        guard let uuid = GlobalVariables.uuid else { return }
-        
-        if #available(iOS 13.0, *) {
-            let beaconRegion = CLBeaconRegion(uuid: uuid, identifier: GlobalVariables.identifier)
-            locationManager.startMonitoring(for: beaconRegion)
-            locationManager.startRangingBeacons(in: beaconRegion)
-        } else {
-            let beaconRegion = CLBeaconRegion(proximityUUID: uuid, identifier: GlobalVariables.identifier)
-            locationManager.startRangingBeacons(in: beaconRegion)
+    private func showNeedAuthAlert(title: String, message: String) {
+        let alertController = UIAlertController (title: title, message: message, preferredStyle: .alert)
+
+        let settingsAction = UIAlertAction(title: "Open", style: .default) { (_) -> Void in
+            guard let settingsUrl = URL(string: UIApplication.openSettingsURLString) else { return }
+
+            if UIApplication.shared.canOpenURL(settingsUrl) {
+                UIApplication.shared.open(settingsUrl, completionHandler: nil)
+            }
         }
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .default, handler: nil)
+        
+        alertController.addAction(settingsAction)
+        alertController.addAction(cancelAction)
+
+        present(alertController, animated: true, completion: nil)
     }
 }
 
@@ -132,6 +174,19 @@ extension BeaconDevicesViewController: CLLocationManagerDelegate {
             }
             
             tableView.reloadData()
+        }
+    }
+}
+
+extension BeaconDevicesViewController: CBCentralManagerDelegate {
+    func centralManagerDidUpdateState(_ central: CBCentralManager) {
+        switch central.state {
+        case .poweredOn:
+            becameBeacon()
+        case .poweredOff:
+            showNeedAuthAlert(title: "Bluetooth Turned Off", message: "Your Bluetooth is turned off. \nDo you want to open Settings to turn it on?")
+        default:
+            showNeedAuthAlert(title: "No Bluetooth Data", message: "App uses bluetooth to calculate distance between you and other people. \nOpen Settings to turn it on?")
         }
     }
 }
