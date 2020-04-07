@@ -89,18 +89,18 @@ extension BluetoothDevicesViewController: CBPeripheralManagerDelegate {
 
 extension BluetoothDevicesViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell: UITableViewCell = self.tableView.dequeueReusableCell(withIdentifier: "cell")! as UITableViewCell
-
+        let cell = self.tableView.dequeueReusableCell(withIdentifier: BeaconDeviceTableViewCell.cellIdentifier) as! BeaconDeviceTableViewCell
+        
         let beacon = knownBeaconsArray[indexPath.row]
-        cell.textLabel?.text = beacon.locationString()
-        cell.detailTextLabel?.text = beacon.locationString()
+        cell.emojiNameLabel.text = beacon.emojiName
+        cell.distanceLabel.text = beacon.locationString()
 
         if #available(iOS 13.0, *) {
-            cell.textLabel?.textColor = .label
-            cell.detailTextLabel?.textColor = .secondaryLabel
+            cell.emojiNameLabel?.textColor = .label
+            cell.distanceLabel?.textColor = .secondaryLabel
         } else {
-            cell.textLabel?.textColor = .black
-            cell.detailTextLabel?.textColor = .black
+            cell.emojiNameLabel?.textColor = .black
+            cell.distanceLabel?.textColor = .black
         }
 
         return cell
