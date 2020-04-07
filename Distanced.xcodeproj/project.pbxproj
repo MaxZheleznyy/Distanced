@@ -43,6 +43,44 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		500CF896243D04920037DADC /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				5035EEBF2434FDEA00B2694F /* BluetoothDevicesViewController.swift */,
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		500CF897243D049C0037DADC /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				5035EECF2435072A00B2694F /* BluetoothDeviceObject.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		500CF898243D04A60037DADC /* Support */ = {
+			isa = PBXGroup;
+			children = (
+				5035EEBB2434FDEA00B2694F /* AppDelegate.swift */,
+				5035EEBD2434FDEA00B2694F /* SceneDelegate.swift */,
+				500CF894243CFDB90037DADC /* GlobalVariables.swift */,
+				5035EEC42434FDEB00B2694F /* Assets.xcassets */,
+				5035EEC92434FDEB00B2694F /* Info.plist */,
+			);
+			path = Support;
+			sourceTree = "<group>";
+		};
+		500CF899243D04B20037DADC /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				500CF892243CFB8C0037DADC /* BeaconDeviceTableViewCell.swift */,
+				5035EEC12434FDEA00B2694F /* Main.storyboard */,
+				5035EEC62434FDEB00B2694F /* LaunchScreen.storyboard */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
 		5035EEAF2434FDE900B2694F = {
 			isa = PBXGroup;
 			children = (
@@ -62,16 +100,10 @@
 		5035EEBA2434FDEA00B2694F /* Distanced */ = {
 			isa = PBXGroup;
 			children = (
-				5035EEBB2434FDEA00B2694F /* AppDelegate.swift */,
-				5035EEBD2434FDEA00B2694F /* SceneDelegate.swift */,
-				5035EEBF2434FDEA00B2694F /* BluetoothDevicesViewController.swift */,
-				5035EECF2435072A00B2694F /* BluetoothDeviceObject.swift */,
-				500CF892243CFB8C0037DADC /* BeaconDeviceTableViewCell.swift */,
-				500CF894243CFDB90037DADC /* GlobalVariables.swift */,
-				5035EEC12434FDEA00B2694F /* Main.storyboard */,
-				5035EEC42434FDEB00B2694F /* Assets.xcassets */,
-				5035EEC62434FDEB00B2694F /* LaunchScreen.storyboard */,
-				5035EEC92434FDEB00B2694F /* Info.plist */,
+				500CF899243D04B20037DADC /* Views */,
+				500CF896243D04920037DADC /* ViewControllers */,
+				500CF897243D049C0037DADC /* Models */,
+				500CF898243D04A60037DADC /* Support */,
 			);
 			path = Distanced;
 			sourceTree = "<group>";
@@ -298,7 +330,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = M5GNN3BNG3;
-				INFOPLIST_FILE = Distanced/Info.plist;
+				INFOPLIST_FILE = Distanced/Support/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -317,7 +349,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = M5GNN3BNG3;
-				INFOPLIST_FILE = Distanced/Info.plist;
+				INFOPLIST_FILE = Distanced/Support/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
