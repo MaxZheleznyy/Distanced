@@ -9,45 +9,60 @@
 import Foundation
 import CoreLocation
 
-struct BluetoothDeviceObjectConstant {
-    static let nameKey = "name"
-    static let uuidKey = "uuid"
-    static let majorKey = "major"
-    static let minorKey = "minor"
-}
-
-class BluetoothDeviceObject: NSObject, NSCoding {
-    let name: String
+struct BluetoothDeviceObject: Hashable {
+    let identifier: String
     let uuid: UUID
     let majorValue: CLBeaconMajorValue
     let minorValue: CLBeaconMinorValue
+    let emojiName: String
+    var beacon: CLBeacon
     
-    init(name: String, uuid: UUID, majorValue: Int, minorValue: Int) {
-        self.name = name
+    var uniquNameHash: Int {
+        get {
+            return (identifier + String(majorValue) + String(minorValue)).hashValue
+        }
+    }
+    
+    private let emojiArray = ["✌", "😂", "😝", "😁", "😱", "👉", "🙌", "🍻", "🔥", "🌈", "☀", "🎈", "🌹", "💄", "🎀", "⚽", "🎾", "🏁", "😡", "👿", "🐻", "🐶", "🐬", "🐟", "🍀", "👀", "🚗", "🍎", "💝", "💙", "👌", "❤", "😍", "😉", "😓", "😳", "💪", "💩", "🍸", "🔑", "💖", "🌟", "🎉", "🌺", "🎶", "👠", "🏈", "⚾", "🏆", "👽", "💀", "🐵", "🐮", "🐩", "🐎", "💣", "👃", "👂", "🍓", "💘", "💜", "👊", "💋", "😘", "😜", "😵", "🙏", "👋", "🚽", "💃", "💎", "🚀", "🌙", "🎁", "⛄", "🌊", "⛵", "🏀", "🎱", "💰", "👶", "👸", "🐰", "🐷", "🐍", "🐫", "🔫", "👄", "🚲", "🍉", "💛", "💚"]
+    
+    init(identifier: String, uuid: UUID, majorValue: Int, minorValue: Int, beacon: CLBeacon) {
+        self.identifier = identifier
         self.uuid = uuid
         self.majorValue = CLBeaconMajorValue(majorValue)
         self.minorValue = CLBeaconMinorValue(minorValue)
-    }
-
-    required init(coder aDecoder: NSCoder) {
-        let aName = aDecoder.decodeObject(forKey: BluetoothDeviceObjectConstant.nameKey) as? String
-        name = aName ?? ""
-        
-        let aUUID = aDecoder.decodeObject(forKey: BluetoothDeviceObjectConstant.uuidKey) as? UUID
-        uuid = aUUID ?? UUID()
-        
-        majorValue = UInt16(aDecoder.decodeInteger(forKey: BluetoothDeviceObjectConstant.majorKey))
-        minorValue = UInt16(aDecoder.decodeInteger(forKey: BluetoothDeviceObjectConstant.minorKey))
+        self.beacon = beacon
+        self.emojiName = emojiArray.randomElement() ?? "🐶"
     }
     
-    func encode(with aCoder: NSCoder) {
-        aCoder.encode(name, forKey: BluetoothDeviceObjectConstant.nameKey)
-        aCoder.encode(uuid, forKey: BluetoothDeviceObjectConstant.uuidKey)
-        aCoder.encode(Int(majorValue), forKey: BluetoothDeviceObjectConstant.majorKey)
-        aCoder.encode(Int(minorValue), forKey: BluetoothDeviceObjectConstant.minorKey)
+    func locationString() -> String {
+        let proximity = nameForProximity(beacon.proximity)
+        let accuracy = String(format: "%.2f", beacon.accuracy)
+        
+        var location = "Location: \(proximity)"
+        if beacon.proximity != .unknown {
+          location += " (approx. \(accuracy)m)"
+        }
+        
+        return location
     }
     
-    func asBeaconRegion() -> CLBeaconRegion {
-      return CLBeaconRegion(proximityUUID: uuid, major: majorValue, minor: minorValue, identifier: name)
+    func nameForProximity(_ proximity: CLProximity) -> String {
+        switch proximity {
+        case .unknown:
+            return "Unknown"
+        case .immediate:
+            return "Immediate"
+        case .near:
+            return "Near"
+        case .far:
+            return "Far"
+            
+        @unknown default:
+            fatalError()
+        }
+    }
+    
+    static func == (lhs: BluetoothDeviceObject, rhs: BluetoothDeviceObject) -> Bool {
+        return lhs.uniquNameHash == rhs.uniquNameHash
     }
 }
