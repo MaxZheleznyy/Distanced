@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		500CF893243CFB8C0037DADC /* BeaconDeviceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500CF892243CFB8C0037DADC /* BeaconDeviceTableViewCell.swift */; };
+		500CF895243CFDB90037DADC /* GlobalVariables.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500CF894243CFDB90037DADC /* GlobalVariables.swift */; };
 		5035EEBC2434FDEA00B2694F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5035EEBB2434FDEA00B2694F /* AppDelegate.swift */; };
 		5035EEBE2434FDEA00B2694F /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5035EEBD2434FDEA00B2694F /* SceneDelegate.swift */; };
 		5035EEC02434FDEA00B2694F /* BluetoothDevicesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5035EEBF2434FDEA00B2694F /* BluetoothDevicesViewController.swift */; };
@@ -19,6 +20,7 @@
 
 /* Begin PBXFileReference section */
 		500CF892243CFB8C0037DADC /* BeaconDeviceTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeaconDeviceTableViewCell.swift; sourceTree = "<group>"; };
+		500CF894243CFDB90037DADC /* GlobalVariables.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalVariables.swift; sourceTree = "<group>"; };
 		5035EEB82434FDEA00B2694F /* Distanced.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Distanced.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5035EEBB2434FDEA00B2694F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5035EEBD2434FDEA00B2694F /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -65,6 +67,7 @@
 				5035EEBF2434FDEA00B2694F /* BluetoothDevicesViewController.swift */,
 				5035EECF2435072A00B2694F /* BluetoothDeviceObject.swift */,
 				500CF892243CFB8C0037DADC /* BeaconDeviceTableViewCell.swift */,
+				500CF894243CFDB90037DADC /* GlobalVariables.swift */,
 				5035EEC12434FDEA00B2694F /* Main.storyboard */,
 				5035EEC42434FDEB00B2694F /* Assets.xcassets */,
 				5035EEC62434FDEB00B2694F /* LaunchScreen.storyboard */,
@@ -144,6 +147,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				500CF895243CFDB90037DADC /* GlobalVariables.swift in Sources */,
 				500CF893243CFB8C0037DADC /* BeaconDeviceTableViewCell.swift in Sources */,
 				5035EEC02434FDEA00B2694F /* BluetoothDevicesViewController.swift in Sources */,
 				5035EED02435072A00B2694F /* BluetoothDeviceObject.swift in Sources */,

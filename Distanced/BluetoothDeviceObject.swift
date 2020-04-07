@@ -10,28 +10,30 @@ import Foundation
 import CoreLocation
 
 struct BluetoothDeviceObject: Hashable {
-    let identifier: String
     let uuid: UUID
     let majorValue: CLBeaconMajorValue
     let minorValue: CLBeaconMinorValue
-    let emojiName: String
-    var beacon: CLBeacon
     
-    var uniquNameHash: Int {
+    var beacon: CLBeacon
+    var emojiName: String?
+    
+    private var uniquNameHash: Int {
         get {
-            return (identifier + String(majorValue) + String(minorValue)).hashValue
+            return (String(majorValue) + String(minorValue)).hashValue
         }
     }
     
-    private let emojiArray = ["✌", "😂", "😝", "😁", "😱", "👉", "🙌", "🍻", "🔥", "🌈", "☀", "🎈", "🌹", "💄", "🎀", "⚽", "🎾", "🏁", "😡", "👿", "🐻", "🐶", "🐬", "🐟", "🍀", "👀", "🚗", "🍎", "💝", "💙", "👌", "❤", "😍", "😉", "😓", "😳", "💪", "💩", "🍸", "🔑", "💖", "🌟", "🎉", "🌺", "🎶", "👠", "🏈", "⚾", "🏆", "👽", "💀", "🐵", "🐮", "🐩", "🐎", "💣", "👃", "👂", "🍓", "💘", "💜", "👊", "💋", "😘", "😜", "😵", "🙏", "👋", "🚽", "💃", "💎", "🚀", "🌙", "🎁", "⛄", "🌊", "⛵", "🏀", "🎱", "💰", "👶", "👸", "🐰", "🐷", "🐍", "🐫", "🔫", "👄", "🚲", "🍉", "💛", "💚"]
-    
-    init(identifier: String, uuid: UUID, majorValue: Int, minorValue: Int, beacon: CLBeacon) {
-        self.identifier = identifier
-        self.uuid = uuid
-        self.majorValue = CLBeaconMajorValue(majorValue)
-        self.minorValue = CLBeaconMinorValue(minorValue)
+    init(beacon: CLBeacon) {
         self.beacon = beacon
-        self.emojiName = emojiArray.randomElement() ?? "🐶"
+        
+        if #available(iOS 13.0, *) {
+            self.uuid = beacon.uuid
+        } else {
+            self.uuid = beacon.proximityUUID
+        }
+        
+        self.majorValue = CLBeaconMajorValue(truncating: beacon.major)
+        self.minorValue = CLBeaconMinorValue(truncating: beacon.minor)
     }
     
     func locationString() -> String {

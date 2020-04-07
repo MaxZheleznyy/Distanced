@@ -21,11 +21,6 @@ class BluetoothDevicesViewController: UIViewController {
     var beaconPeripheralData: NSDictionary!
     var peripheralManager: CBPeripheralManager!
     
-    let localBeaconUUID = "CCDE4695-104E-4E86-BFB9-70EC5168A161"
-    let randomMajor = UInt16.random(in: 1...900)
-    let randomMinor = UInt16.random(in: 1...900)
-    let identifier = "com.maxzheleznyy.Distanced"
-    
     var knownBeaconsArray = [BluetoothDeviceObject]()
     
     override func viewDidLoad() {
@@ -46,11 +41,14 @@ class BluetoothDevicesViewController: UIViewController {
             stopBeingBeacon()
         }
         
-        guard let uuid = UUID(uuidString: localBeaconUUID) else { return }
+        guard let uuid = GlobalVariables.uuid else { return }
+        let randomMajor = UInt16.random(in: 1...900)
+        let randomMinor = UInt16.random(in: 1...900)
+        
         if #available(iOS 13.0, *) {
-            localBeacon = CLBeaconRegion(uuid: uuid, major: randomMajor, minor: randomMinor, identifier: identifier)
+            localBeacon = CLBeaconRegion(uuid: uuid, major: randomMajor, minor: randomMinor, identifier: GlobalVariables.identifier)
         } else {
-            localBeacon = CLBeaconRegion(proximityUUID: uuid, major: randomMajor, minor: randomMinor, identifier: identifier)
+            localBeacon = CLBeaconRegion(proximityUUID: uuid, major: randomMajor, minor: randomMinor, identifier: GlobalVariables.identifier)
         }
         beaconPeripheralData = localBeacon.peripheralData(withMeasuredPower: nil)
         peripheralManager = CBPeripheralManager(delegate: self, queue: nil, options: nil)
@@ -64,14 +62,14 @@ class BluetoothDevicesViewController: UIViewController {
     }
     
     func startLookingForBeacons() {
-        guard let uuid: UUID = UUID.init(uuidString: localBeaconUUID) else { return }
+        guard let uuid = GlobalVariables.uuid else { return }
         
         if #available(iOS 13.0, *) {
-            let beaconRegion = CLBeaconRegion(uuid: uuid, identifier: identifier)
+            let beaconRegion = CLBeaconRegion(uuid: uuid, identifier: GlobalVariables.identifier)
             locationManager.startMonitoring(for: beaconRegion)
             locationManager.startRangingBeacons(in: beaconRegion)
         } else {
-            let beaconRegion = CLBeaconRegion(proximityUUID: uuid, identifier: identifier)
+            let beaconRegion = CLBeaconRegion(proximityUUID: uuid, identifier: GlobalVariables.identifier)
             locationManager.startRangingBeacons(in: beaconRegion)
         }
     }
@@ -121,19 +119,15 @@ extension BluetoothDevicesViewController: CLLocationManagerDelegate {
     }
 
     func locationManager(_ manager: CLLocationManager, didRangeBeacons beacons: [CLBeacon], in region: CLBeaconRegion) {
-        for beacon in beacons {
-            var beaconUUID = UUID()
+        for beacon in beacons {            
+            var newDevice = BluetoothDeviceObject(beacon: beacon)
             
-            if #available(iOS 13.0, *) {
-                beaconUUID = beacon.uuid
-            } else {
-                beaconUUID = beacon.proximityUUID
-            }
-            
-            let newDevice = BluetoothDeviceObject(identifier: identifier, uuid: beaconUUID, majorValue: Int(truncating: beacon.major), minorValue: Int(truncating: beacon.minor), beacon: beacon)
             if let existingDeviceIndex = knownBeaconsArray.firstIndex(of: newDevice) {
+                let oldDeviceObjectEmoji = knownBeaconsArray[existingDeviceIndex].emojiName
+                newDevice.emojiName = oldDeviceObjectEmoji
                 knownBeaconsArray[existingDeviceIndex] = newDevice
             } else {
+                newDevice.emojiName = GlobalVariables.emojiArray.randomElement() ?? "🐶"
                 knownBeaconsArray.append(newDevice)
             }
             
