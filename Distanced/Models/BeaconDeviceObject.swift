@@ -48,6 +48,16 @@ struct BeaconDeviceObject: Hashable {
         return location
     }
     
+    func getDistaceDangerLevel() -> GlobalVariables.BeaconDistanceDangerLevel {
+        if 0...2.5 ~= beacon.accuracy {
+            return .danger
+        } else if 2.51...5 ~= beacon.accuracy {
+            return .caution
+        } else {
+            return .relax
+        }
+    }
+    
     func nameForProximity(_ proximity: CLProximity) -> String {
         switch proximity {
         case .unknown:
