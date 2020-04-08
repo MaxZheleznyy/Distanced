@@ -14,5 +14,15 @@ class BeaconDeviceTableViewCell: UITableViewCell {
     @IBOutlet weak var emojiNameLabel: UILabel!
     @IBOutlet weak var distanceLabel: UILabel!
     
-    
+    var beacon: BeaconDeviceObject? = nil {
+        didSet {
+            if let nonEmptyBeacon = beacon {
+                emojiNameLabel.text = nonEmptyBeacon.emojiName
+                distanceLabel.text = nonEmptyBeacon.locationString()
+            } else {
+                emojiNameLabel.text = ""
+                distanceLabel.text = ""
+            }
+        }
+    }
 }

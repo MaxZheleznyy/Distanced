@@ -168,12 +168,18 @@ extension BeaconDevicesViewController: CLLocationManagerDelegate {
                 let oldDeviceObjectEmoji = knownBeaconsArray[existingDeviceIndex].emojiName
                 newDevice.emojiName = oldDeviceObjectEmoji
                 knownBeaconsArray[existingDeviceIndex] = newDevice
+                
+                if let visibleRows = tableView.indexPathsForVisibleRows, visibleRows.contains(IndexPath(row: existingDeviceIndex, section: 0)) {
+                    let cellToUpdate = tableView.cellForRow(at: IndexPath(row: existingDeviceIndex, section: 0)) as! BeaconDeviceTableViewCell
+                    cellToUpdate.beacon = newDevice
+                }
             } else {
                 newDevice.emojiName = GlobalVariables.emojiArray.randomElement() ?? "🐶"
-                knownBeaconsArray.append(newDevice)
+                knownBeaconsArray.insert(newDevice, at: 0)
+                tableView.beginUpdates()
+                tableView.insertRows(at: [IndexPath.init(row: 0, section: 0)], with: .automatic)
+                tableView.endUpdates()
             }
-            
-            tableView.reloadData()
         }
     }
 }
