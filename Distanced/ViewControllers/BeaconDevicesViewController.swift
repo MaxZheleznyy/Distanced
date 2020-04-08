@@ -132,16 +132,8 @@ extension BeaconDevicesViewController: UITableViewDataSource, UITableViewDelegat
         let cell = self.tableView.dequeueReusableCell(withIdentifier: BeaconDeviceTableViewCell.cellIdentifier) as! BeaconDeviceTableViewCell
         
         let beacon = knownBeaconsArray[indexPath.row]
-        cell.emojiNameLabel.text = beacon.emojiName
-        cell.distanceLabel.text = beacon.locationString()
-
-        if #available(iOS 13.0, *) {
-            cell.emojiNameLabel?.textColor = .label
-            cell.distanceLabel?.textColor = .secondaryLabel
-        } else {
-            cell.emojiNameLabel?.textColor = .black
-            cell.distanceLabel?.textColor = .black
-        }
+        cell.beacon = beacon
+        cell.delegate = self
 
         return cell
     }
@@ -194,5 +186,12 @@ extension BeaconDevicesViewController: CBCentralManagerDelegate {
         default:
             showNeedAuthAlert(title: "No Bluetooth Data", message: "App uses bluetooth to calculate distance between you and other people. \nOpen Settings to turn it on?")
         }
+    }
+}
+
+extension BeaconDevicesViewController: BeaconDeviceTableViewCellDelegate {
+    func beaconTooClose(beacon: BeaconDeviceObject) {
+        let generator = UINotificationFeedbackGenerator()
+        generator.notificationOccurred(.warning)
     }
 }
