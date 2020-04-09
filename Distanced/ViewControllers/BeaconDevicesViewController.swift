@@ -9,6 +9,7 @@
 import UIKit
 import CoreLocation
 import CoreBluetooth
+import UserNotifications
 
 
 class BeaconDevicesViewController: UIViewController {
@@ -21,6 +22,8 @@ class BeaconDevicesViewController: UIViewController {
     var beaconPeripheralData: NSDictionary!
     var peripheralManager: CBPeripheralManager!
     var manager: CBCentralManager!
+    
+    let userNotificationCenter = UNUserNotificationCenter.current()
     
     var knownBeaconsArray = [BeaconDeviceObject]()
     
@@ -36,6 +39,9 @@ class BeaconDevicesViewController: UIViewController {
         tableView.dataSource = self
         
         getLocationStatus()
+        
+        userNotificationCenter.delegate = self
+        requestNotificationAuthorization()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -193,5 +199,57 @@ extension BeaconDevicesViewController: BeaconDeviceTableViewCellDelegate {
     func beaconTooClose(beacon: BeaconDeviceObject) {
         let generator = UINotificationFeedbackGenerator()
         generator.notificationOccurred(.warning)
+        
+        sendNotification(beaconEmoji: beacon.emojiName)
+    }
+}
+
+extension BeaconDevicesViewController: UNUserNotificationCenterDelegate {
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+        completionHandler()
+    }
+
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        completionHandler([.alert, .sound])
+    }
+    
+    func requestNotificationAuthorization() {
+        let authOptions = UNAuthorizationOptions.init(arrayLiteral: .alert, .sound)
+        
+        self.userNotificationCenter.requestAuthorization(options: authOptions) { (success, error) in
+            if success {
+            } else if let error = error {
+                print(error.localizedDescription)
+            }
+        }
+    }
+
+    func sendNotification(beaconEmoji: String?) {
+        let content = UNMutableNotificationContent()
+
+        content.title = "Warning"
+        
+        if let nonEmptyEmoji = beaconEmoji {
+            content.body = "Another user named \(nonEmptyEmoji) is too close to you!"
+        } else {
+            content.body = "Somebody is too close to you!"
+        }
+        
+        content.sound = UNNotificationSound.default
+
+        if let url = Bundle.main.url(forResource: "alert", withExtension: "png") {
+            if let attachment = try? UNNotificationAttachment(identifier: "alert", url: url, options: nil) {
+                content.attachments = [attachment]
+            }
+        }
+        
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
+        let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
+
+        UNUserNotificationCenter.current().add(request) { error in
+            if let error = error {
+                print(error.localizedDescription)
+            }
+        }
     }
 }

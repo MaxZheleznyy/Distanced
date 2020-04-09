@@ -22,8 +22,10 @@ class BeaconDeviceTableViewCell: UITableViewCell {
     
     weak var delegate: BeaconDeviceTableViewCellDelegate?
     
+    private var oldDangerValue: GlobalVariables.BeaconDistanceDangerLevel = .relax
     var beacon: BeaconDeviceObject? = nil {
         didSet {
+            oldDangerValue = oldValue?.getDistaceDangerLevel() ?? .relax
             configureCell()
         }
     }
@@ -50,15 +52,18 @@ class BeaconDeviceTableViewCell: UITableViewCell {
     
     private func updateContainerViewUI(beacon: BeaconDeviceObject) {
         let dangerLevel = beacon.getDistaceDangerLevel()
-        UIView.animate(withDuration: 0.8) {
-            switch dangerLevel {
-            case .danger:
-                self.containerView.backgroundColor = .systemRed
-                self.delegate?.beaconTooClose(beacon: beacon)
-            case .caution:
-                self.containerView.backgroundColor = .systemOrange
-            default:
-                self.containerView.backgroundColor = .systemGreen
+        
+        if oldDangerValue != dangerLevel {
+            UIView.animate(withDuration: 0.8) {
+                switch dangerLevel {
+                case .danger:
+                    self.containerView.backgroundColor = .systemRed
+                    self.delegate?.beaconTooClose(beacon: beacon)
+                case .caution:
+                    self.containerView.backgroundColor = .systemOrange
+                default:
+                    self.containerView.backgroundColor = .systemGreen
+                }
             }
         }
     }

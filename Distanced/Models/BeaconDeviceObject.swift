@@ -49,9 +49,9 @@ struct BeaconDeviceObject: Hashable {
     }
     
     func getDistaceDangerLevel() -> GlobalVariables.BeaconDistanceDangerLevel {
-        if 0...2.5 ~= beacon.accuracy {
+        if 0...1.5 ~= beacon.accuracy {
             return .danger
-        } else if 2.51...5 ~= beacon.accuracy {
+        } else if 1.51...3 ~= beacon.accuracy {
             return .caution
         } else {
             return .relax
