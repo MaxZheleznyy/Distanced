@@ -58,13 +58,31 @@ class BeaconDeviceTableViewCell: UITableViewCell {
                 switch dangerLevel {
                 case .danger:
                     self.containerView.backgroundColor = .systemRed
+                    self.startAnimation()
                     self.delegate?.beaconTooClose(beacon: beacon)
                 case .caution:
+                    self.stopAnimation()
                     self.containerView.backgroundColor = .systemOrange
                 default:
+                    self.stopAnimation()
                     self.containerView.backgroundColor = .systemGreen
                 }
             }
         }
+    }
+    
+    private func startAnimation() {
+        let animation = CABasicAnimation(keyPath: "transform.scale")
+        animation.toValue = 1.05
+        animation.duration = 0.8
+        animation.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeOut)
+        animation.autoreverses = true
+        animation.repeatCount = Float.infinity
+        
+        containerView.layer.add(animation, forKey: "pulsing")
+    }
+    
+    private func stopAnimation() {
+        containerView.layer.removeAllAnimations()
     }
 }
