@@ -11,6 +11,7 @@ import UIKit
 
 protocol BeaconDeviceTableViewCellDelegate: AnyObject {
     func beaconTooClose(beacon: BeaconDeviceObject)
+    func removeInactiveCell(indexPath: IndexPath)
 }
 
 class BeaconDeviceTableViewCell: UITableViewCell {
@@ -21,6 +22,11 @@ class BeaconDeviceTableViewCell: UITableViewCell {
     @IBOutlet weak var distanceLabel: UILabel!
     
     weak var delegate: BeaconDeviceTableViewCellDelegate?
+    
+    private var remainingSeconds = 3
+    private var countdownTimer: Timer?
+    
+    var shouldBeHidden = false
     
     private var oldDangerValue: GlobalVariables.BeaconDistanceDangerLevel = .relax
     var beacon: BeaconDeviceObject? = nil {
@@ -60,15 +66,19 @@ class BeaconDeviceTableViewCell: UITableViewCell {
                     self.containerView.backgroundColor = .systemRed
                     self.startAnimation()
                     self.delegate?.beaconTooClose(beacon: beacon)
+                    self.cancelInactiveCellTimer()
                 case .caution:
                     self.stopAnimation()
                     self.containerView.backgroundColor = .systemOrange
+                    self.cancelInactiveCellTimer()
                 case .relax:
                     self.stopAnimation()
                     self.containerView.backgroundColor = .systemGreen
+                    self.cancelInactiveCellTimer()
                 default:
                     self.stopAnimation()
                     self.containerView.backgroundColor = UIColor.white.withAlphaComponent(0)
+                    self.initiateInactiveCellTimer()
                 }
             }
         }
@@ -87,5 +97,34 @@ class BeaconDeviceTableViewCell: UITableViewCell {
     
     private func stopAnimation() {
         containerView.layer.removeAllAnimations()
+    }
+    
+    private func initiateInactiveCellTimer() {
+        guard countdownTimer == nil else { return }
+        
+        countdownTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] timer in
+            self?.remainingSeconds -= 1
+            if self?.remainingSeconds == 0 {
+                timer.invalidate()
+                self?.cancelInactiveCellTimer()
+                if let nonEmptyIndexPath = self?.getIndexPath() {
+                    self?.shouldBeHidden = true
+                    self?.delegate?.removeInactiveCell(indexPath: nonEmptyIndexPath)
+                }
+            }
+        }
+    }
+    
+    private func cancelInactiveCellTimer() {
+        countdownTimer?.invalidate()
+        countdownTimer = nil
+        shouldBeHidden = false
+    }
+    
+    private func getIndexPath() -> IndexPath? {
+        guard let superView = self.superview as? UITableView else { return nil }
+        
+        let indexPath = superView.indexPath(for: self)
+        return indexPath
     }
 }

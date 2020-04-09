@@ -140,12 +140,22 @@ extension BeaconDevicesViewController: UITableViewDataSource, UITableViewDelegat
         let beacon = knownBeaconsArray[indexPath.row]
         cell.beacon = beacon
         cell.delegate = self
+        cell.isHidden = cell.shouldBeHidden
 
         return cell
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return knownBeaconsArray.count
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        let cell = self.tableView.dequeueReusableCell(withIdentifier: BeaconDeviceTableViewCell.cellIdentifier) as! BeaconDeviceTableViewCell
+        if cell.shouldBeHidden {
+            return 0.0
+        } else {
+            return 58.0
+        }
     }
 }
 
@@ -171,7 +181,7 @@ extension BeaconDevicesViewController: CLLocationManagerDelegate {
                     let cellToUpdate = tableView.cellForRow(at: IndexPath(row: existingDeviceIndex, section: 0)) as! BeaconDeviceTableViewCell
                     cellToUpdate.beacon = newDevice
                 }
-            } else {
+            } else if newDevice.beacon.proximity != .unknown {
                 newDevice.emojiName = GlobalVariables.emojiArray.randomElement() ?? "🐶"
                 knownBeaconsArray.insert(newDevice, at: 0)
                 tableView.beginUpdates()
@@ -196,6 +206,14 @@ extension BeaconDevicesViewController: CBCentralManagerDelegate {
 }
 
 extension BeaconDevicesViewController: BeaconDeviceTableViewCellDelegate {
+    func removeInactiveCell(indexPath: IndexPath) {
+        let indexPathArray = [indexPath]
+        tableView.beginUpdates()
+        tableView.deleteRows(at: indexPathArray, with: .automatic)
+        knownBeaconsArray.remove(at: indexPath.row)
+        tableView.endUpdates()
+    }
+    
     func beaconTooClose(beacon: BeaconDeviceObject) {
         let generator = UINotificationFeedbackGenerator()
         generator.notificationOccurred(.warning)
