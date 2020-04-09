@@ -53,8 +53,10 @@ struct BeaconDeviceObject: Hashable {
             return .danger
         } else if 1.51...3 ~= beacon.accuracy {
             return .caution
-        } else {
+        } else if beacon.accuracy > 3 {
             return .relax
+        } else {
+            return .unknown
         }
     }
     

@@ -63,9 +63,12 @@ class BeaconDeviceTableViewCell: UITableViewCell {
                 case .caution:
                     self.stopAnimation()
                     self.containerView.backgroundColor = .systemOrange
-                default:
+                case .relax:
                     self.stopAnimation()
                     self.containerView.backgroundColor = .systemGreen
+                default:
+                    self.stopAnimation()
+                    self.containerView.backgroundColor = UIColor.white.withAlphaComponent(0)
                 }
             }
         }

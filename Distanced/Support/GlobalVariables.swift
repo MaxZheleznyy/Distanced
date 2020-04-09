@@ -19,5 +19,6 @@ struct GlobalVariables {
         case danger
         case caution
         case relax
+        case unknown
     }
 }
