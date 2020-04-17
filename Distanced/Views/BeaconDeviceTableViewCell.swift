@@ -52,7 +52,7 @@ class BeaconDeviceTableViewCell: UITableViewCell {
         } else {
             emojiNameLabel.text = ""
             distanceLabel.text = ""
-            containerView.backgroundColor = UIColor.white.withAlphaComponent(0)
+            containerView.backgroundColor = .clear
         }
     }
     
@@ -77,7 +77,7 @@ class BeaconDeviceTableViewCell: UITableViewCell {
                     self.cancelInactiveCellTimer()
                 default:
                     self.stopAnimation()
-                    self.containerView.backgroundColor = UIColor.white.withAlphaComponent(0)
+                    self.containerView.backgroundColor = .clear
                     self.initiateInactiveCellTimer()
                 }
             }
